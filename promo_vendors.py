@@ -170,16 +170,47 @@ promo_carts_vendorsdf["vendorname"] = promo_carts_vendorsdf["name"].apply(
     lambda x: x.get("en") if isinstance(x, dict) else None
 )
 
+# promo_carts_vendorsdf = promo_carts_vendorsdf[
+#     [
+#         "_id_x",
+#         "userId",
+#         "cartId",
+#         "type",
+#         "success",
+#         "vendorname",
+#         "shoppingCategory",
+#         "createdAt_x",
+#     ]
+# ]
+
+promocode_namesdf["_id"] = promocode_namesdf["_id"].astype(str)
+promo_carts_vendorsdf["promoCodeId"] = promo_carts_vendorsdf[
+    "promoCodeId"
+].astype(str)
+
+promo_carts_vendorsdf = pd.merge(
+    promo_carts_vendorsdf, 
+    promocode_namesdf, 
+    left_on="promoCodeId", 
+    right_on="_id", 
+    how="left",
+    suffixes=("_promo_carts", "_promocode_names") 
+)
+
 promo_carts_vendorsdf = promo_carts_vendorsdf[
     [
         "_id_x",
         "userId",
         "cartId",
-        "type",
+        "type_promo_carts",
         "success",
         "vendorname",
         "shoppingCategory",
         "createdAt_x",
+        "code",
+        "value",
+        "type_promocode_names",
+        "specialType",
     ]
 ]
 
